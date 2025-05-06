@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../features/home/screens/HomeScreen';
 import OnboardingScreen from '../features/onboarding/OnboardingScreen';
-import LoginScreen from '../features/login/LoginScreen';
+import LoginScreen from '../features/login/PhoneSignIn';
 import {MMKVLoader, useMMKVStorage} from 'react-native-mmkv-storage';
-
-type AuthToken = null | {token: string; exp: string};
+import {getAuth} from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator();
 const storage = new MMKVLoader().initialize();
@@ -17,20 +16,17 @@ export default function RootStack() {
     true,
   );
 
-  const [authToken, setAuthToken] = useMMKVStorage<AuthToken>(
-    'authToken',
-    storage,
-    null,
-  );
-
   const completeOnboarding = () => {
     setShowOnboarding(false);
   };
 
-  const isAuthenticated = () => {
-    // later check exp and other fields from jwt
-    return authToken !== null;
-  };
+  const [isLoggedIn, setLoggedIn] = useState(getAuth().currentUser !== null);
+
+  useEffect(() => {
+    getAuth().onAuthStateChanged(user => {
+      setLoggedIn(user !== null);
+    });
+  }, []);
 
   return (
     <Stack.Navigator>
@@ -43,7 +39,7 @@ export default function RootStack() {
         />
       ) : (
         <>
-          {isAuthenticated() ? (
+          {isLoggedIn ? (
             <Stack.Screen
               name="Home"
               component={HomeScreen}

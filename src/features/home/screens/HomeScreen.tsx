@@ -1,11 +1,17 @@
+import {getAuth} from '@react-native-firebase/auth';
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 
 export default function HomeScreen() {
-
   return (
     <View>
       <Text>Welcome to CallNetwork 👋</Text>
+      <Button
+        onPress={() => {
+          getAuth().signOut();
+        }}
+        title="Sign Out"
+      />
     </View>
   );
 }
