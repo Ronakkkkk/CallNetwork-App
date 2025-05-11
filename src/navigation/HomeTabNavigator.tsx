@@ -4,15 +4,40 @@ import DashboardTab from '../features/main/tabs/DashboardTab';
 import ContactsTab from '../features/main/tabs/ContactsTab';
 import ProfileTab from '../features/main/tabs/ProfileTab';
 
+import {axios} from '../api/index';
+import {useEffect, useState} from 'react';
+import {useUserDispatchContext} from '../context/UserContext';
+import {Text, View} from 'react-native';
+
 const Tab = createBottomTabNavigator();
 
 export function HomeTabNavigator() {
-  return (
+  const [isLoading, setLoading] = useState(true);
+  const setUser = useUserDispatchContext();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const {data} = await axios.get('user/profile');
+        setUser(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  });
+
+  return isLoading ? (
+    <View>
+      <Text>Loading</Text>
+    </View>
+  ) : (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeTab} />
-      <Tab.Screen name="Dashboard" component={DashboardTab} />
-      <Tab.Screen name="Contacts" component={ContactsTab} />
-      <Tab.Screen name="Profile" component={ProfileTab} />
+      <Tab.Screen name="HomeTab" component={HomeTab} />
+      <Tab.Screen name="DashboardTab" component={DashboardTab} />
+      <Tab.Screen name="ContactsTab" component={ContactsTab} />
+      <Tab.Screen name="ProfileTab" component={ProfileTab} />
     </Tab.Navigator>
   );
 }

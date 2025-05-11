@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '../features/main/screens/HomeScreen';
 import OnboardingScreen from '../features/onboarding/OnboardingScreen';
-import LoginScreen from '../features/login/PhoneSignIn';
 import {MMKVLoader, useMMKVStorage} from 'react-native-mmkv-storage';
 import {getAuth} from '@react-native-firebase/auth';
-import { HomeTabNavigator } from './HomeTabNavigator';
-import TelegramSignIn from '../features/login/TelegramSignIn';
+import {HomeTabNavigator} from './HomeTabNavigator';
+import Login from '../features/login/Login';
+import {UserContextProvider} from '../context/UserContext';
 
 const Stack = createNativeStackNavigator();
 const storage = new MMKVLoader().initialize();
@@ -43,14 +42,18 @@ export default function RootStack() {
         <>
           {isLoggedIn ? (
             <Stack.Screen
-              name="Home"
-              component={HomeTabNavigator}
+              name="HomeStack"
               options={{title: 'Main'}}
+              children={() => (
+                <UserContextProvider>
+                  <HomeTabNavigator />
+                </UserContextProvider>
+              )}
             />
           ) : (
             <Stack.Screen
               name="Login"
-              component={TelegramSignIn}
+              component={Login}
               options={{title: 'Login'}}
             />
           )}
