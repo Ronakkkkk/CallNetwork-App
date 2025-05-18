@@ -22,42 +22,71 @@ export default function RootStack() {
   };
 
   const [isLoggedIn, setLoggedIn] = useState(getAuth().currentUser !== null);
-
+  const [goto, setNogo] = useState(true);
   useEffect(() => {
     getAuth().onAuthStateChanged(user => {
       setLoggedIn(user !== null);
     });
   }, []);
 
+  //   return (
+  //     <Stack.Navigator>
+  //       {showOnboarding ? (
+  //         <Stack.Screen
+  //           name="Onboarding"
+  //           children={() => (
+  //             <OnboardingScreen completeOnboarding={completeOnboarding} />
+  //           )}
+  //         />
+  //       ) : (
+  //         <>
+  //           {isLoggedIn ? (
+  //             <Stack.Screen
+  //               name="HomeStack"
+  //               options={{title: 'Main'}}
+  //               children={() => (
+  //                 <UserContextProvider>
+  //                   <HomeTabNavigator />
+  //                 </UserContextProvider>
+  //               )}
+  //             />
+  //           ) : (
+  //             <Stack.Screen
+  //               name="Login"
+  //               component={Login}
+  //               options={{title: 'Login'}}
+  //             />
+  //           )}
+  //         </>
+  //       )}
+  //     </Stack.Navigator>
+  //   );
+  // }
+
   return (
     <Stack.Navigator>
-      {showOnboarding ? (
+      <Stack.Screen
+        name="Onboarding"
+        children={() => (
+          <OnboardingScreen completeOnboarding={completeOnboarding} />
+        )}
+      />
+      {goto ? (
         <Stack.Screen
-          name="Onboarding"
+          name="HomeStack"
+          options={{title: 'Main', headerShown: false}}
           children={() => (
-            <OnboardingScreen completeOnboarding={completeOnboarding} />
+            <UserContextProvider>
+              <HomeTabNavigator />
+            </UserContextProvider>
           )}
         />
       ) : (
-        <>
-          {isLoggedIn ? (
-            <Stack.Screen
-              name="HomeStack"
-              options={{title: 'Main'}}
-              children={() => (
-                <UserContextProvider>
-                  <HomeTabNavigator />
-                </UserContextProvider>
-              )}
-            />
-          ) : (
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{title: 'Login'}}
-            />
-          )}
-        </>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{title: 'Login'}}
+        />
       )}
     </Stack.Navigator>
   );

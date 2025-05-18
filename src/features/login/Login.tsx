@@ -6,6 +6,7 @@ import {
   signInWithPhoneNumber,
 } from '@react-native-firebase/auth';
 import WebView from 'react-native-webview';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 export default function Login() {
   // If null, no SMS has been sent
@@ -24,6 +25,8 @@ export default function Login() {
       getAuth(),
       userPhoneNumber,
     );
+    console.log('confimarion');
+    console.log('confimarion', confirmation);
     setConfirm(confirmation);
   }
 
@@ -36,11 +39,12 @@ export default function Login() {
     }
   }
 
+  const navigation = useNavigation();
   // Stuff to show before sending OTP
   if (!confirm) {
     return (
       <>
-        <Text>Enter your phone number (+977 9860632193)</Text>
+        <Text>Enter your phone numbers (+977 9860632193)</Text>
         <TextInput
           value={phoneNumber}
           onChangeText={text => setPhoneNumber(text)}
@@ -48,6 +52,9 @@ export default function Login() {
         <Button
           title="Sign in with phone number"
           onPress={() => handleSignInWithPhoneNumber(phoneNumber)}
+          // onPress={() => {
+          //   navigation.navigate('HomeStack');
+          // }}
         />
         <Text>OR</Text>
         <WebView

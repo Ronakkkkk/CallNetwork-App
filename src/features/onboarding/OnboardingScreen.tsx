@@ -6,6 +6,7 @@ import Onbo2 from './img/onbo2.svg';
 import Onbo3 from './img/onbo3.svg';
 
 import {OnboardingButton} from './Components';
+import {useNavigation} from '@react-navigation/native';
 
 export default function OnboardingScreen({
   completeOnboarding,
@@ -36,6 +37,12 @@ export default function OnboardingScreen({
         'Block unwanted calls and enjoy a seamless calling experience.',
     },
   ];
+
+  const navigation = useNavigation();
+  const completeOnboardingHandler = () => {
+    completeOnboarding();
+    navigation.navigate('HomeStack');
+  };
   return (
     <>
       <PagerView initialPage={0} style={styles.pagerView}>
@@ -50,8 +57,11 @@ export default function OnboardingScreen({
             </View>
           );
         })}
+        <OnboardingButton
+          text={'Get Started'}
+          onPress={completeOnboardingHandler}
+        />
       </PagerView>
-      <OnboardingButton text={'Get Started'} onPress={completeOnboarding} />
     </>
   );
 }

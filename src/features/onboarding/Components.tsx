@@ -18,7 +18,11 @@ export function OnboardingButton({
       alignSelf: 'flex-start',
       borderRadius: 6,
     },
-    text: {},
+    text: {
+      backgroundColor: 'red',
+      alignContent: 'center',
+      justifyContent: 'center',
+    },
   });
   return (
     <Pressable style={styles.pressable} onPress={onPress}>
