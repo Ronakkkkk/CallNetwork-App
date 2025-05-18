@@ -59,39 +59,65 @@ export default function HomeTab() {
   return (
     <ScrollView style={styles.container}>
       {/* Top bar */}
-      <View style={styles.topBar}>
-        <View style={styles.userInfo}>
+      <View style={styles.topBarContainer}>
+        <View style={styles.topBarBackground}>
           <Image
             source={require('../../../assets/images/profile.png')}
-            style={styles.profileImage}
+            style={styles.backgroundImage}
+            blurRadius={10}
           />
-          <View style={styles.userDetails}>
-            <Text style={styles.welcomeText}>Welcome, John Doe</Text>
-            <View style={styles.addressContainer}>
-              <Text style={styles.addressText}>
-                {truncateAddress('234567890987656789876787')}
-              </Text>
-              <TouchableOpacity style={styles.copyButton}>
-                <Feather name="copy" size={16} color={colors.purple} />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.backgroundOverlay} />
+        </View>
+
+        <View style={styles.topBarContent}>
+          <TouchableOpacity style={styles.backButton}>
+            <Feather name="arrow-left" size={24} color={colors.white} />
+          </TouchableOpacity>
+
+          <View style={styles.userInfo}>
+            <Image
+              source={require('../../../assets/images/profile.png')}
+              style={styles.profileImage}
+            />
           </View>
+        </View>
+      </View>
+
+      {/* User Details Section - Centered below the background */}
+      <View style={styles.userDetailsSection}>
+        <Text style={styles.welcomeText}>Welcome, John Doe</Text>
+        <View style={styles.addressContainer}>
+          <Text style={styles.addressText}>
+            {truncateAddress('234567890987656789876787')}
+          </Text>
+          <TouchableOpacity style={styles.copyButton}>
+            <Feather name="copy" size={16} color={colors.purple} />
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Balance Card */}
       <View style={styles.balanceCard}>
-        <Text style={styles.balanceLabel}>$CALL BALANCE</Text>
-        <Text style={styles.balanceValue}>{callBalance}</Text>
+        <View style={styles.balanceInfo}>
+          <Text style={styles.balanceLabel}>$CALL BALANCE :</Text>
+          <Text style={styles.balanceValue}>{callBalance}</Text>
+        </View>
       </View>
 
       {/* Stats Grid */}
       <View style={styles.statsGrid}>
         <View style={styles.statCard}>
+          <View style={styles.statIconContainer}>
+            <Feather name="users" size={22} color={colors.purple} />
+          </View>
           <Text style={styles.statLabel}>Total Contacts</Text>
           <Text style={styles.statValue}>{totalContacts}</Text>
         </View>
+
         <View style={styles.statCard}>
+          <View style={styles.statIconContainer}>
+            <Feather name="alert-triangle" size={22} color={colors.purple} />
+          </View>
           <Text style={styles.statLabel}>Spam Detected</Text>
           <Text style={styles.statValue}>{spamDetected}</Text>
         </View>
@@ -147,10 +173,10 @@ export default function HomeTab() {
       </View>
 
       {/* Import Contacts Button */}
-      <TouchableOpacity style={styles.importButton}>
+      {/* <TouchableOpacity style={styles.importButton}>
         <AntDesign name="addusergroup" size={20} color="white" />
         <Text style={styles.importButtonText}>Import Contacts</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </ScrollView>
   );
 }
@@ -161,41 +187,77 @@ const styles = StyleSheet.create({
     backgroundColor: colors.black,
     padding: 16,
   },
-  topBar: {
-    marginBottom: 20,
+  topBarContainer: {
+    position: 'relative',
+    height: 180, // 20% of typical screen height
+  },
+  topBarBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+  },
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  backgroundOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  topBarContent: {
+    flex: 1,
+    padding: 16,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   userInfo: {
-    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   profileImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     borderWidth: 2,
     borderColor: colors.purple,
   },
-  userDetails: {
-    marginLeft: 12,
-    flex: 1,
+  // New section for content below the background
+  userDetailsSection: {
+    paddingHorizontal: 16,
+    marginTop: -20, // Negative margin to create overlap with profile image
+    marginBottom: 24,
+    alignItems: 'center', // Center align all content
   },
   welcomeText: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
     color: colors.white,
-    marginBottom: 4,
+    marginBottom: 8,
+    textAlign: 'center', // Center the text
   },
   addressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    // Remove background color
+    backgroundColor: 'transparent',
     borderRadius: 8,
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    alignSelf: 'flex-start',
+    paddingVertical: 8,
   },
   addressText: {
-    color: '#ccc',
+    color: 'rgba(255, 255, 255, 0.6)', // Decreased opacity
     fontSize: 14,
     marginRight: 8,
   },
@@ -208,11 +270,18 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  balanceInfo: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    fontSize: 18,
   },
   balanceLabel: {
-    color: '#ccc',
-    fontSize: 14,
-    marginBottom: 8,
+    color: colors.white,
+    fontSize: 28, // Increased from 16 to match balanceValue
+    fontWeight: '600',
+    marginRight: 8, // Add spacing between label and value
   },
   balanceValue: {
     color: colors.white,
@@ -231,17 +300,29 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     marginHorizontal: 5,
+    minWidth: '45%', // Enforce minimum width
+  },
+  statIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(151, 71, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
   },
   statLabel: {
     color: '#ccc',
     fontSize: 12,
-    marginBottom: 8,
     fontWeight: '500',
+    marginBottom: 4,
+    textAlign: 'center',
   },
   statValue: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '700',
+    textAlign: 'center',
   },
   rewardSection: {
     marginBottom: 20,

@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 6,
     marginRight: 12,
+    opacity: 0.3,
   },
   tagText: {
     color: colors.white,
