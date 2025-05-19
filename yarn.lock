@@ -4038,6 +4038,7 @@ __metadata:
     react-native-circular-progress: "npm:^1.4.1"
     react-native-gesture-handler: "npm:^2.25.0"
     react-native-mmkv-storage: "npm:^0.11.2"
+    react-native-otp-entry: "npm:^1.8.4"
     react-native-pager-view: "npm:^6.7.1"
     react-native-reanimated: "npm:^3.17.5"
     react-native-safe-area-context: "npm:^5.4.0"
@@ -9791,6 +9792,16 @@ __metadata:
   bin:
     mmkv-link: autolink/postlink/run.js
   checksum: 10c0/0b53482335c7a7963deff3534fa4887af705a300787462657ec9c3437bb31d938b72265dafac608a44f2c9c6426be2d1f4869364c26ad5b4de00f5494dbc517b
+  languageName: node
+  linkType: hard
+
+"react-native-otp-entry@npm:^1.8.4":
+  version: 1.8.4
+  resolution: "react-native-otp-entry@npm:1.8.4"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/614478f7e605dc66ac6af56f6c678d49f508b74e052e8bd300339f26a91afc2dc6b666d2dfe7956023e2bac758c59206ed082e39cdc30a934cb86ea7b12a19c1
   languageName: node
   linkType: hard
 
