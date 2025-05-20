@@ -21,72 +21,43 @@ export default function RootStack() {
     setShowOnboarding(false);
   };
 
-  const [isLoggedIn, setLoggedIn] = useState(getAuth().currentUser !== null);
-  const [goto, setNogo] = useState(true);
+  const [isLoggedIn, setLoggedIn] = useState(true);
   useEffect(() => {
-    getAuth().onAuthStateChanged(user => {
+  // Firebase internal stuff
+    const unsubscribe = getAuth().onAuthStateChanged(user => {
       setLoggedIn(user !== null);
     });
+    return unsubscribe;
   }, []);
 
-  //   return (
-  //     <Stack.Navigator>
-  //       {showOnboarding ? (
-  //         <Stack.Screen
-  //           name="Onboarding"
-  //           children={() => (
-  //             <OnboardingScreen completeOnboarding={completeOnboarding} />
-  //           )}
-  //         />
-  //       ) : (
-  //         <>
-  //           {isLoggedIn ? (
-  //             <Stack.Screen
-  //               name="HomeStack"
-  //               options={{title: 'Main'}}
-  //               children={() => (
-  //                 <UserContextProvider>
-  //                   <HomeTabNavigator />
-  //                 </UserContextProvider>
-  //               )}
-  //             />
-  //           ) : (
-  //             <Stack.Screen
-  //               name="Login"
-  //               component={Login}
-  //               options={{title: 'Login'}}
-  //             />
-  //           )}
-  //         </>
-  //       )}
-  //     </Stack.Navigator>
-  //   );
-  // }
-
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Onboarding"
-        children={() => (
-          <OnboardingScreen completeOnboarding={completeOnboarding} />
-        )}
-      />
-      {goto ? (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {showOnboarding ? (
         <Stack.Screen
-          name="HomeStack"
-          options={{title: 'Main', headerShown: false}}
+          name="Onboarding"
           children={() => (
-            <UserContextProvider>
-              <HomeTabNavigator />
-            </UserContextProvider>
+            <OnboardingScreen completeOnboarding={completeOnboarding} />
           )}
         />
       ) : (
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{title: 'Login'}}
-        />
+        <>
+          {isLoggedIn ? (
+            <Stack.Screen
+              name="HomeStack"
+              children={() => (
+                <UserContextProvider>
+                  <HomeTabNavigator />
+                </UserContextProvider>
+              )}
+            />
+          ) : (
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{title: 'Login'}}
+            />
+          )}
+        </>
       )}
     </Stack.Navigator>
   );

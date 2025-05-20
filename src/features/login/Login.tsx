@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {
@@ -14,11 +15,13 @@ import {
   getAuth,
   signInWithPhoneNumber,
 } from '@react-native-firebase/auth';
-import WebView from 'react-native-webview';
 import {OtpInput} from 'react-native-otp-entry';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import colors from '../../config/color';
+import * as Progress from 'react-native-progress';
 
 export default function Login() {
+  const [isLoading, setLoading] = useState(false);
+
   // If null, no SMS has been sent
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
@@ -29,82 +32,119 @@ export default function Login() {
   // user phone number
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  // Handle the button press
-  async function handleSignInWithPhoneNumber(userPhoneNumber: string) {
-    const confirmation = await signInWithPhoneNumber(
-      getAuth(),
-      userPhoneNumber,
-    );
-    console.log('confimarion');
-    console.log('confimarion', confirmation);
+  // Handle phone number entry
+  async function handleSignInWithPhoneNumber() {
+    setLoading(true);
+    const confirmation = await signInWithPhoneNumber(getAuth(), phoneNumber);
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    setLoading(false);
     setConfirm(confirmation);
   }
 
+  // Handle otp verification
   async function confirmCode() {
     try {
-      const user = await confirm?.confirm(code);
-      console.log(user);
+      setLoading(true);
+      await confirm?.confirm(code);
+      setLoading(false);
     } catch (error) {
       console.log('Invalid code.');
     }
   }
 
-  const navigation = useNavigation();
   // Stuff to show before sending OTP
   if (!confirm) {
     return (
       <View style={styles.main}>
-        {/* <View style={{flex: 1}} /> */}
-
         <Image
           source={require('../../assets/images/logo.png')} // local image
           style={styles.logoImage}
         />
         <Text>Welcome to CallNetwork</Text>
         <Text>Login using your phone number to get started</Text>
-        <Text>Enter your phone number (+977 9860632193)</Text>
-        {/* <View style={{flex:1}}></View> */}
+        <Text>Enter your phone number</Text>
         <TextInput
           placeholder="Enter your phone number"
           value={phoneNumber}
           onChangeText={text => setPhoneNumber(text)}
           style={styles.textInput}
         />
-        {/* <View style={{flex: 1}} /> */}
-        <CustomButton
-          title="Login"
-          onPress={() => handleSignInWithPhoneNumber(phoneNumber)}
-          // onPress={() => {
-          //   navigation.navigate('HomeStack');
-          // }}
-        />
-        {/* <Text>OR</Text> */}
-        {/* <WebView
-          source={{
-            uri: 'https://develop.callnetwork.xyz/api/v1/tglogin',
-          }}
-        /> */}
-        {/* <View style={{flex: 1}} /> */}
+
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={handleSignInWithPhoneNumber}>
+          <Text style={styles.loginButtonText}>Login</Text>
+          {/* Add icon maybe */}
+          {isLoading && (
+            <Progress.Circle
+              size={30}
+              indeterminate={true}
+              color={colors.white}
+            />
+          )}
+        </TouchableOpacity>
       </View>
     );
   }
 
   // Stuff to show after sending OTP
   return (
-    <>
+    <View style={styles.main}>
       <Text>Enter code (111111)</Text>
-      <OtpInput numberOfDigits={6} onTextChange={text => console.log(text)} />
-      <TextInput value={code} onChangeText={text => setCode(text)} />
-      <Button title="Login" onPress={() => confirmCode()} />
-      <Button title="Try another number" onPress={() => setConfirm(null)} />
-    </>
+      <OtpInput
+        numberOfDigits={6}
+        onTextChange={text => setCode(text)}
+        focusColor={colors.purple}
+        theme={{
+          pinCodeContainerStyle: {height: 50},
+        }}
+      />
+      <TouchableOpacity style={styles.loginButton} onPress={confirmCode}>
+        <Text style={styles.loginButtonText}>Login</Text>
+        {/* Add icon maybe */}
+        {isLoading && (
+          <Progress.Circle
+            size={30}
+            indeterminate={true}
+            color={colors.white}
+          />
+        )}
+      </TouchableOpacity>
+
+      <Pressable onPress={() => setConfirm(null)}>
+        <Text style={{color: colors.purple}}>Try another number</Text>
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  main: {flex: 1, justifyContent: 'center', alignItems: 'center', gap: 4},
+  main: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+    paddingInline: 20,
+  },
   logoImage: {height: 67, width: 60},
   textInput: {borderColor: '#ABABAB', borderWidth: 2, borderRadius: 16},
+  loginButton: {
+    flexDirection: 'row',
+    backgroundColor: colors.purple,
+    borderRadius: 10,
+    paddingVertical: 14,
+    marginHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+    width: '90%',
+  },
+  loginButtonText: {
+    color: colors.white,
+    fontWeight: '600',
+    fontSize: 16,
+    marginLeft: 8,
+  },
 });
 
 function CustomButton({
