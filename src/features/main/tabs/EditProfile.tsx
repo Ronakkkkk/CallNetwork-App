@@ -11,11 +11,12 @@ import React, {useState} from 'react';
 import colors from '../../../config/color';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import Edit from '../../../assets/svg/Edit.svg';
 
 const EditProfile = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('johndoe@example.com');
-  const [phone, setPhone] = useState('983737373');
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
   const [accountType, setAccountType] = useState('personal'); // 'personal' or 'professional'
 
   const navigation = useNavigation();
@@ -27,103 +28,141 @@ const EditProfile = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.container}>
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContentContainer}>
+        <View style={styles.header}>
+          {/* <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}>
+            <Feather name="chevron-left" size={24} color={colors.white} />
+          </TouchableOpacity> */}
+          <View style={{flex: 1}} />
+          <TouchableOpacity style={styles.settingButton}>
+            <Feather name="settings" size={24} color={colors.purple} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.profileImageSection}>
+          <View style={styles.profileImageContainer}>
+            <Image
+              source={require('../../../assets/images/profile.png')}
+              style={styles.profileImage}
+            />
+            <TouchableOpacity style={styles.editImageButton}>
+              <Edit width={18} height={18} style={{}} color={colors.white} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.formContainer}>
+          <View style={styles.inputGroup}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={setName}
+                placeholderTextColor="#999"
+                placeholder="Name here.."
+              />
+              {name && (
+                <TouchableOpacity
+                  style={styles.clearButton}
+                  onPress={() => setName('')}>
+                  <Feather name="x" size={16} color="#999" />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                value={phone}
+                onChangeText={setPhone}
+                placeholderTextColor="#999"
+                placeholder="Mobile No."
+                keyboardType="phone-pad"
+              />
+              {phone && (
+                <TouchableOpacity
+                  style={styles.clearButton}
+                  onPress={() => setPhone('')}>
+                  <Feather name="x" size={16} color="#999" />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                placeholderTextColor="#999"
+                placeholder="Email.."
+                keyboardType="email-address"
+              />
+              {email && (
+                <TouchableOpacity
+                  style={styles.clearButton}
+                  onPress={() => setEmail('')}>
+                  <Feather name="x" size={16} color="#999" />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
+          <View style={styles.accountTypeContainer}>
+            <TouchableOpacity
+              style={[
+                styles.accountTypeButton,
+                accountType === 'personal' && styles.activeAccountType,
+              ]}
+              onPress={() => setAccountType('personal')}>
+              <Text
+                style={[
+                  styles.accountTypeText,
+                  accountType === 'personal' && styles.activeAccountTypeText,
+                ]}>
+                Personal
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.accountTypeButton,
+                accountType === 'professional' && styles.activeAccountType,
+              ]}
+              onPress={() => setAccountType('professional')}>
+              <Text
+                style={[
+                  styles.accountTypeText,
+                  accountType === 'professional' &&
+                    styles.activeAccountTypeText,
+                ]}>
+                Professional
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Add padding at bottom to ensure content isn't hidden behind the fixed button */}
+          <View style={styles.bottomPadding} />
+        </View>
+      </ScrollView>
+
+      {/* Fixed Save Button at bottom */}
+      <View style={styles.saveButtonContainer}>
         <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Feather name="arrow-left" size={24} color={colors.white} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Edit Profile</Text>
-        <View style={{width: 24}} />
-      </View>
-
-      <View style={styles.profileImageSection}>
-        <View style={styles.profileImageContainer}>
-          <Image
-            source={require('../../../assets/images/profile.png')}
-            style={styles.profileImage}
-          />
-          <TouchableOpacity style={styles.editImageButton}>
-            <Feather name="camera" size={16} color={colors.white} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.formContainer}>
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Name</Text>
-          <TextInput
-            style={styles.input}
-            value={name}
-            onChangeText={setName}
-            placeholderTextColor="#999"
-            placeholder="Enter your name"
-          />
-        </View>
-
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Email</Text>
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            placeholderTextColor="#999"
-            placeholder="Enter your email"
-            keyboardType="email-address"
-          />
-        </View>
-
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Phone Number</Text>
-          <TextInput
-            style={styles.input}
-            value={phone}
-            onChangeText={setPhone}
-            placeholderTextColor="#999"
-            placeholder="Enter your phone number"
-            keyboardType="phone-pad"
-          />
-        </View>
-
-        <Text style={styles.sectionTitle}>Account Type</Text>
-        <View style={styles.accountTypeContainer}>
-          <TouchableOpacity
-            style={[
-              styles.accountTypeButton,
-              accountType === 'personal' && styles.activeAccountType,
-            ]}
-            onPress={() => setAccountType('personal')}>
-            <Text
-              style={[
-                styles.accountTypeText,
-                accountType === 'personal' && styles.activeAccountTypeText,
-              ]}>
-              Personal
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.accountTypeButton,
-              accountType === 'professional' && styles.activeAccountType,
-            ]}
-            onPress={() => setAccountType('professional')}>
-            <Text
-              style={[
-                styles.accountTypeText,
-                accountType === 'professional' && styles.activeAccountTypeText,
-              ]}>
-              Professional
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          style={styles.saveButton}
+          onPress={handleSave}
+          activeOpacity={0.8}>
           <Text style={styles.saveButtonText}>Save Changes</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -134,17 +173,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.black,
   },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContentContainer: {
+    paddingBottom: 20,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 20,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-    borderBottomWidth: 1,
   },
   backButton: {
-    padding: 4,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
   },
   headerTitle: {
     fontSize: 18,
@@ -169,18 +214,27 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    backgroundColor: colors.purple,
+    backgroundColor: '#785981',
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    borderColor: '#390083',
+    borderWidth: 1,
   },
   formContainer: {
     paddingHorizontal: 20,
   },
   inputGroup: {
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#645774',
+    backgroundColor: '#22103a',
+    borderRadius: 8,
+  },
+  bottomPadding: {
+    height: 80, // Add padding to ensure content isn't hidden behind the fixed button
   },
   inputLabel: {
     color: colors.white,
@@ -189,11 +243,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 8,
+    flex: 1,
+    backgroundColor: 'transparent',
     padding: 12,
     color: colors.white,
     fontSize: 16,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  clearButton: {
+    padding: 8,
+    marginRight: 4,
   },
   sectionTitle: {
     color: colors.white,
@@ -203,16 +265,21 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   accountTypeContainer: {
+    alignSelf: 'center',
     flexDirection: 'row',
-    marginBottom: 30,
+    width: '80%',
+    borderRadius: 8,
+    padding: 4,
+    borderWidth: 2,
+    borderColor: '#645774',
+    marginBottom: 20,
   },
   accountTypeButton: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 4,
     borderRadius: 8,
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    marginRight: 12,
   },
   accountTypeText: {
     color: '#ccc',
@@ -224,16 +291,33 @@ const styles = StyleSheet.create({
   activeAccountTypeText: {
     color: colors.white,
   },
+  saveButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
   saveButton: {
     backgroundColor: colors.purple,
     borderRadius: 8,
     paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: 30,
   },
   saveButtonText: {
     color: colors.white,
     fontWeight: '600',
     fontSize: 16,
+  },
+  settingButton: {
+    padding: 12,
+    borderRadius: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderColor: '#301D45',
+    borderWidth: 1,
   },
 });

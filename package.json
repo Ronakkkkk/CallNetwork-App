@@ -25,6 +25,7 @@
     "react-native": "0.79.1",
     "react-native-circular-progress": "^1.4.1",
     "react-native-gesture-handler": "^2.25.0",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-mmkv-storage": "^0.11.2",
     "react-native-pager-view": "^6.7.1",
     "react-native-reanimated": "^3.17.5",
