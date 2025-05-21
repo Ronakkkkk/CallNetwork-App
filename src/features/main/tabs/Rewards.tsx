@@ -10,6 +10,11 @@ import React, {useState} from 'react';
 import colors from '../../../config/color';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Solana from '../../../assets/svg/solana.svg';
+import Creditcard from '../../../assets/svg/Creditcard.svg';
+import RewardHeader from '../../../Components/RewardHeader';
+import Star from '../../../assets/svg/ministar.svg';
 
 const Rewards = () => {
   const navigation = useNavigation();
@@ -25,42 +30,41 @@ const Rewards = () => {
   // Dummy data for earning rules
   const earningRules = [
     {
-      question: 'How do I earn points by importing contacts?',
+      question: '2,000+ points (to $1000+ value) for becoming active',
       answer:
         'You earn 5 points for each new contact you import to the platform. This helps grow our community and improve caller identification.',
     },
     {
-      question: 'How many points do I get for detecting spam?',
+      question: 'Superboost your Solana staking rewards (up to 3X!)',
       answer:
         'You earn 10 points each time you report a number as spam that gets verified by our system or by other users.',
     },
     {
-      question: 'What are points for verifying contacts?',
+      question: '6-18% in reward points per card spend',
       answer:
         'You earn 2 points for each contact you verify as legitimate. This helps improve the accuracy of our database.',
     },
-
   ];
 
   // Dummy leaderboard data
   const leaderboardData = [
     {
       id: 1,
-      name: 'Alex Morgan',
-      score: 950,
-      image: require('../../../assets/images/profile.png'),
+      name: 'Rohit  Agrawal',
+      score: 2422,
+      image: require('../../../assets/images/pp.png'),
     },
     {
       id: 2,
-      name: 'Sarah Kim',
-      score: 820,
-      image: require('../../../assets/images/profile.png'),
+      name: 'Rohit  Agrawal',
+      score: 2422,
+      image: require('../../../assets/images/pp.png'),
     },
     {
       id: 3,
-      name: 'John Doe',
-      score: 780,
-      image: require('../../../assets/images/profile.png'),
+      name: 'Rohit  Agrawal',
+      score: 2422,
+      image: require('../../../assets/images/pp.png'),
     },
   ];
 
@@ -74,25 +78,40 @@ const Rewards = () => {
           <Feather name="arrow-left" size={24} color={colors.white} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Rewards</Text>
-        <View style={{width: 24}} />
+        <Feather name="help-circle" size={24} color={colors.white} />
+      </View>
+      <View
+        style={{
+          width: '100%',
+          height: 20, // Increase height to give more space
+          position: 'relative', // Keep this
+          marginBottom: 10, // Add margin below the stars
+        }}>
+        <Star
+          width={44}
+          height={44}
+          style={{
+            position: 'absolute',
+            top: -10, // Position from top
+            right: 100, // Position from right edge
+            zIndex: 2,
+          }}
+        />
+        <Star
+          width={20}
+          height={20}
+          style={{
+            position: 'absolute',
+            top: -10, // Slightly lower than the first star
+            right: 90, // Further from right than the first star
+            zIndex: 2,
+          }}
+        />
       </View>
 
+      <RewardHeader name="Kash Dhandha" callpoints="250" />
+
       {/* User Points Summary */}
-      <View style={styles.userPointsCard}>
-        <View style={styles.userInfo}>
-          <Image
-            source={require('../../../assets/images/profile.png')}
-            style={styles.userAvatar}
-          />
-          <View style={styles.userDetails}>
-            <Text style={styles.userName}>John Doe</Text>
-            <View style={styles.pointsContainer}>
-              <Feather name="award" size={16} color={colors.purple} />
-              <Text style={styles.pointsText}>200 Call Points</Text>
-            </View>
-          </View>
-        </View>
-      </View>
 
       {/* History Section */}
       <View style={styles.section}>
@@ -100,18 +119,18 @@ const Rewards = () => {
 
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>100</Text>
             <Text style={styles.statLabel}>Contacts Imported</Text>
+            <Text style={styles.statValue}>86</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>30</Text>
             <Text style={styles.statLabel}>Spam Detected</Text>
+            <Text style={styles.statValue}>20</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Text style={styles.statValue}>10</Text>
             <Text style={styles.statLabel}>Contacts Verified</Text>
+            <Text style={styles.statValue}>14</Text>
           </View>
         </View>
       </View>
@@ -126,6 +145,22 @@ const Rewards = () => {
             style={styles.faqItem}
             onPress={() => toggleFAQ(index)}>
             <View style={styles.faqHeader}>
+              {/* Display different icon based on index */}
+              {index === 0 && (
+                <AntDesign
+                  name="staro"
+                  size={20}
+                  color={colors.white}
+                  style={styles.ruleIcon}
+                />
+              )}
+              {index === 1 && (
+                <Creditcard width={20} height={20} style={styles.ruleIcon} />
+              )}
+              {index === 2 && (
+                <Solana width={20} height={20} style={styles.ruleIcon} />
+              )}
+
               <Text style={styles.faqQuestion}>{rule.question}</Text>
               <Feather
                 name={expandedFAQ === index ? 'chevron-up' : 'chevron-down'}
@@ -147,10 +182,6 @@ const Rewards = () => {
 
         {leaderboardData.map((user, index) => (
           <View key={user.id} style={styles.leaderboardItem}>
-            <View style={styles.rankContainer}>
-              <Text style={styles.rankText}>{index + 1}</Text>
-            </View>
-
             <Image source={user.image} style={styles.leaderAvatar} />
 
             <View style={styles.leaderInfo}>
@@ -159,48 +190,12 @@ const Rewards = () => {
 
             <View style={styles.scoreContainer}>
               <Text style={styles.scoreText}>{user.score}</Text>
-              <Text style={styles.pointsLabel}>pts</Text>
             </View>
           </View>
         ))}
       </View>
 
       {/* Available Rewards Section */}
-      <View style={[styles.section, styles.rewardsSection]}>
-        <Text style={styles.sectionTitle}>Available Rewards</Text>
-
-        <View style={styles.rewardCard}>
-          <View style={styles.rewardIconContainer}>
-            <Feather name="gift" size={24} color={colors.purple} />
-          </View>
-          <View style={styles.rewardInfo}>
-            <Text style={styles.rewardTitle}>Premium Features</Text>
-            <Text style={styles.rewardDescription}>
-              Unlock advanced caller ID features
-            </Text>
-          </View>
-          <View style={styles.rewardPoints}>
-            <Text style={styles.rewardPointsText}>500</Text>
-            <Text style={styles.rewardPointsLabel}>pts</Text>
-          </View>
-        </View>
-
-        <View style={styles.rewardCard}>
-          <View style={styles.rewardIconContainer}>
-            <Feather name="dollar-sign" size={24} color={colors.purple} />
-          </View>
-          <View style={styles.rewardInfo}>
-            <Text style={styles.rewardTitle}>Token Rewards</Text>
-            <Text style={styles.rewardDescription}>
-              Convert points to crypto tokens
-            </Text>
-          </View>
-          <View style={styles.rewardPoints}>
-            <Text style={styles.rewardPointsText}>1000</Text>
-            <Text style={styles.rewardPointsLabel}>pts</Text>
-          </View>
-        </View>
-      </View>
     </ScrollView>
   );
 };
@@ -210,7 +205,7 @@ export default Rewards;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.black,
+    backgroundColor: colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -218,11 +213,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 20,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-    borderBottomWidth: 1,
   },
   backButton: {
     padding: 4,
+  },
+  topTetrax: {
+    position: 'absolute',
+    bottom: 120,
+    right: 60,
+    zIndex: 2,
   },
   headerTitle: {
     fontSize: 18,
@@ -268,53 +267,65 @@ const styles = StyleSheet.create({
   },
   section: {
     marginHorizontal: 16,
-    marginBottom: 24,
+    marginBottom: 4,
+    marginTop: 20,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.white,
-    marginBottom: 16,
+    color: '#5a5363',
+    marginBottom: 12, // Reduced from 16
+    alignSelf: 'center',
   },
   statsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    marginBottom: 0, // Remove bottom margin
+    marginVertical: 0, // Remove vertical margin
   },
   statCard: {
     flex: 1,
-    backgroundColor: 'rgba(151, 71, 255, 0.3)',
     borderRadius: 12,
-    padding: 16,
+    padding: 10, // Reduce padding further
     alignItems: 'center',
     marginHorizontal: 4,
+    marginBottom: 2, // Add small bottom margin to each card
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent', // Remove background color
   },
   statValue: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '700',
     color: colors.white,
     marginBottom: 6,
   },
   statLabel: {
-    fontSize: 12,
-    color: '#aaa',
+    fontSize: 15,
+    color: colors.white,
     textAlign: 'center',
   },
   faqItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // More subtle background
-    borderRadius: 12,
     padding: 16,
     marginBottom: 10,
+    backgroundColor: '#1f0f35',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#615772',
+    // Remove the flexDirection: 'row' from here as it's causing layout issues
   },
   faqHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%', // Ensure it takes full width
   },
   faqQuestion: {
     flex: 1,
     fontSize: 14,
     fontWeight: '500',
     color: colors.white,
+    paddingHorizontal: 12, // Add padding on both sides
   },
   faqAnswer: {
     marginTop: 12,
@@ -325,10 +336,12 @@ const styles = StyleSheet.create({
   leaderboardItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)', // More subtle background
+    backgroundColor: '#1f0f35', // More subtle background
     borderRadius: 12,
     padding: 12,
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#615772',
   },
   rankContainer: {
     width: 30,
@@ -363,7 +376,7 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
   },
   scoreText: {
-    color: '#9747FF', // Solid color for emphasis
+    color: colors.white, // Solid color for emphasis
     fontWeight: '700',
     fontSize: 18,
   },
@@ -418,5 +431,9 @@ const styles = StyleSheet.create({
     color: '#aaa',
     fontSize: 12,
     marginLeft: 2,
+  },
+  ruleIcon: {
+    marginLeft: 8, // Add some left margin
+    marginRight: 12, // Keep the right margin
   },
 });
