@@ -18,6 +18,7 @@ import {
 import {OtpInput} from 'react-native-otp-entry';
 import colors from '../../config/color';
 import * as Progress from 'react-native-progress';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Login() {
   const [isLoading, setLoading] = useState(false);
@@ -40,6 +41,7 @@ export default function Login() {
     setLoading(false);
     setConfirm(confirmation);
   }
+  const navigation = useNavigation<any>();
 
   // Handle otp verification
   async function confirmCode() {
@@ -47,6 +49,7 @@ export default function Login() {
       setLoading(true);
       await confirm?.confirm(code);
       setLoading(false);
+      navigation.navigate('OnboardingScreen2');
     } catch (error) {
       console.log('Invalid code.');
     }
