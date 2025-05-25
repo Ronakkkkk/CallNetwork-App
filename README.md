@@ -18,4 +18,5 @@ CallNetwork is **DePIN for Trucaller** that empowers users to build a **decentra
 ## 📸 Screenshots
 |-----------|------------------|-----------|
 
-| (![ss1](https://github.com/user-attachments/assets/1755dae1-fd64-4913-91ca-debbd868140a)) | (![ss3](https://github.com/user-attachments/assets/bd4ec54d-06e6-4d50-8f2a-f2c24c273d78)) | (![Real-Blue](https://github.com/user-attachments/assets/75dac7ae-428d-461b-9039-7d295e5678de)) |
+![Frame 14](https://github.com/user-attachments/assets/c10af05c-ca90-49d1-84ef-0f14e4319933)
+
