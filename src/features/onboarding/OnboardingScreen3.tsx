@@ -41,14 +41,14 @@ const OnboardingScreen3 = () => {
           </View>
         </View>
 
-        
+
         {/* Container for description text and blur stars */}
         <View style={styles.descriptionContainer}>
           <Text style={styles.description}>
             Click 'Continue' to connect with our bot and easily add your contacts
             in just a few steps!
           </Text>
-          
+
           {/* Stars positioned behind the description text */}
           <Blurstar width={50} height={50} style={styles.blurredStar1} opacity={0.5} />
           <Blurstar2 width={30} height={30} style={styles.blurredStar2} opacity={0.7} />
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
       marginBottom: 40,
-    padding:20
+    padding:20,
   },
   description: {
     fontFamily: 'PoppinsRegular',

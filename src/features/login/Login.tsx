@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
-  Dimensions,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -23,8 +22,6 @@ import * as Progress from 'react-native-progress';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import Star from '../../assets/svg/ministar.svg';
-
-const {width} = Dimensions.get('window');
 
 export default function Login() {
   const [isLoading, setLoading] = useState(false);

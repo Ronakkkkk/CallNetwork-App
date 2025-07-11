@@ -9,8 +9,6 @@ import {
   Image,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import {useNavigation} from '@react-navigation/native';
-import {OnboardingButton} from './Components';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../config/color';
 import PhoneLinkLock from '../../assets/svg/phonelinklock.svg';
@@ -25,7 +23,6 @@ export default function OnboardingScreen({
 }) {
   const [currentPage, setCurrentPage] = useState(0);
   const pagerRef = useRef<PagerView>(null);
-  const navigation = useNavigation<any>();
 
   // Content for each onboarding page using PNG images instead of SVGs
   const pages = [
@@ -90,9 +87,7 @@ export default function OnboardingScreen({
    * Proceeds to login after completing the initial onboarding slides
    */
   const proceedToContactSetup = () => {
-    console.log('Navigating to Login');
-    // Don't call completeOnboarding() here - we still need the onboarding flow
-    navigation.navigate('Login');
+    completeOnboarding();
   };
 
   /**
@@ -168,56 +163,45 @@ export default function OnboardingScreen({
                     ))}
                   </View>
                 )}
-
-                {/* Navigation Controls */}
-                <View style={styles.navigationContainer}>
-                  <TouchableOpacity
-                    style={[
-                      styles.navButton,
-                      currentPage === 0 && styles.disabledButton,
-                    ]}
-                    onPress={goToPreviousPage}
-                    disabled={currentPage === 0}>
-                    <Feather
-                      name="chevron-left"
-                      size={24}
-                      color={currentPage === 0 ? '#4D3F66' : colors.white}
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.mainButton}
-                    onPress={goToNextPage}>
-                    <Text style={styles.mainButtonText}>
-                      {currentPage === pages.length - 1
-                        ? 'Continue'
-                        : 'Launch App'}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[
-                      styles.navButton,
-                      currentPage === pages.length - 1 && styles.disabledButton,
-                    ]}
-                    onPress={goToNextPage}
-                    disabled={currentPage === pages.length - 1}>
-                    <Feather
-                      name="chevron-right"
-                      size={24}
-                      color={
-                        currentPage === pages.length - 1
-                          ? '#4D3F66'
-                          : colors.white
-                      }
-                    />
-                  </TouchableOpacity>
-                </View>
               </View>
             </View>
           );
         })}
       </PagerView>
+
+      {/* Navigation Controls */}
+      <View style={styles.navigationContainer}>
+        <TouchableOpacity
+          style={[styles.navButton, currentPage === 0 && styles.disabledButton]}
+          onPress={goToPreviousPage}
+          disabled={currentPage === 0}>
+          <Feather
+            name="chevron-left"
+            size={24}
+            color={currentPage === 0 ? '#4D3F66' : colors.white}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.mainButton} onPress={goToNextPage}>
+          <Text style={styles.mainButtonText}>
+            {currentPage === pages.length - 1 ? 'Get Started' : 'Continue'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.navButton,
+            currentPage === pages.length - 1 && styles.disabledButton,
+          ]}
+          onPress={goToNextPage}
+          disabled={currentPage === pages.length - 1}>
+          <Feather
+            name="chevron-right"
+            size={24}
+            color={currentPage === pages.length - 1 ? '#4D3F66' : colors.white}
+          />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -272,10 +256,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.1,
     borderColor: '#aba3b9',
     borderBottomWidth: 0,
-    marginBottom: 40,
   },
   pagerView: {
     flex: 1,
+    marginBottom: 0,
   },
   onboardingTitle: {
     fontFamily: 'PoppinsSemiBold',
@@ -322,10 +306,12 @@ const styles = StyleSheet.create({
   },
   navigationContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    marginTop: 10,
+    backgroundColor: '#311753',
+    gap: 20,
+    paddingBottom: 40,
   },
   navButton: {
     width: 46,

@@ -1,15 +1,12 @@
 import React from 'react';
 import {StyleSheet, Text, Image, TouchableOpacity, View, SafeAreaView, Dimensions} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import colors from '../../config/color';
-import Rocket from "./img/rocket.svg";
-import Star from "../../assets/svg/ministar.svg";
+import Star from '../../assets/svg/ministar.svg';
 
 const {width} = Dimensions.get('window');
 
 const OnboardingScreen4 = ({completeOnboarding}: {completeOnboarding: () => void}) => {
-  const navigation = useNavigation<any>();
-    
+
   const handleComplete = () => {
     // Now we call completeOnboarding to finish the entire onboarding process
     completeOnboarding();
@@ -29,12 +26,12 @@ const OnboardingScreen4 = ({completeOnboarding}: {completeOnboarding: () => void
               style={styles.rocketImage}
               resizeMode="contain"
             />
-            
+
             {/* Stars positioned absolutely on the right side of the rocket */}
             <View style={styles.star1Container}>
               <Star width={40} height={40} />
             </View>
-            
+
             <View style={styles.star2Container}>
               <Star width={25} height={25} />
             </View>

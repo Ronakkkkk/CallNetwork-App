@@ -9,22 +9,20 @@ import {
 import React, {useState} from 'react';
 import colors from '../../../config/color';
 import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Octicons from 'react-native-vector-icons/Octicons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Coin from '../../../assets/svg/coin.svg';
-import Circle from '../../../assets/svg/circle.svg';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../navigation/types';
-import Lock from '../../../assets/svg/Lock.svg';
 import Edit from '../../../assets/svg/Edit.svg';
 import Progressbar from '../../../Components/Progressbar';
+import {useUserContext} from '../../../context/UserContext';
+
 const Profile = () => {
+  const user = useUserContext();
+
   const [totalCoins, setCoins] = useState(2000);
-  const [phonenumber, setPhoneNumber] = useState(983737373);
-  const [totalcontact, setTotalcontact] = useState(100);
-  const [spamdetected, setSpamDetected] = useState(86);
   const [link, setLink] = useState('callnwtk/refera-friend/xyz');
 
   const navigation =
@@ -59,13 +57,13 @@ const Profile = () => {
         {/* Name and Verification */}
         <View style={styles.nameContainer}>
           <View style={styles.nameRow}>
-            <Text style={styles.name}>Welcome Kash !</Text>
+            <Text style={styles.name}>Welcome {user?.firstName}</Text>
             <Octicons name="verified" size={16} color={'#9747FF'} />
           </View>
         </View>
 
         {/* Phone Number */}
-        <Text style={styles.phoneNumber}>{phonenumber}</Text>
+        <Text style={styles.phoneNumber}>{user?.contactNumber}</Text>
 
         {/* Account Type and Edit Button */}
         <View style={styles.accountTypeContainer}>
@@ -140,7 +138,7 @@ const Profile = () => {
         {/* <View style={styles.statCard}> */}
         <View style={styles.statContent}>
           <Text style={styles.statLabel}>Total Contacts</Text>
-          <Text style={styles.statValue}>{totalcontact}</Text>
+          <Text style={styles.statValue}>{user?.activity?.addContactCount ?? 0}</Text>
         </View>
         {/* </View> */}
 
@@ -148,7 +146,7 @@ const Profile = () => {
         {/* <View style={styles.statCard}> */}
         <View style={styles.statContent}>
           <Text style={styles.statLabel}>Spam Detected</Text>
-          <Text style={styles.statValue}>{spamdetected}</Text>
+          <Text style={styles.statValue}>{user?.activity?.spamReportCount ?? 0}</Text>
         </View>
         {/* </View> */}
       </View>

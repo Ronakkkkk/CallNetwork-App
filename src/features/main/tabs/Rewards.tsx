@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../../../config/color';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
@@ -15,8 +15,19 @@ import Solana from '../../../assets/svg/solana.svg';
 import Creditcard from '../../../assets/svg/Creditcard.svg';
 import RewardHeader from '../../../Components/RewardHeader';
 import Star from '../../../assets/svg/ministar.svg';
+import {useUserContext} from '../../../context/UserContext';
+import {axios} from '../../../api';
+
+export interface ILeaderboardContact {
+  _id: string;
+  points: number;
+  firstName: string;
+  lastName: string;
+}
 
 const Rewards = () => {
+  const user = useUserContext();
+
   const navigation = useNavigation();
 
   // FAQ state for expandable sections
@@ -26,6 +37,28 @@ const Rewards = () => {
   const toggleFAQ = (index: number) => {
     setExpandedFAQ(expandedFAQ === index ? null : index);
   };
+
+  const [leaderboardData, setContacts] = useState<ILeaderboardContact[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch contacts data
+  const fetchContactsData = async () => {
+    try {
+      const {data} = await axios.get<ILeaderboardContact[]>('user/leaderboard');
+      setContacts(data);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+        console.error(err.message);
+      } else {
+        setError('An unexpected Error Occurred');
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchContactsData();
+  }, []);
 
   // Dummy data for earning rules
   const earningRules = [
@@ -47,26 +80,26 @@ const Rewards = () => {
   ];
 
   // Dummy leaderboard data
-  const leaderboardData = [
-    {
-      id: 1,
-      name: 'Rohit  Agrawal',
-      score: 2422,
-      image: require('../../../assets/images/pp.png'),
-    },
-    {
-      id: 2,
-      name: 'Rohit  Agrawal',
-      score: 2422,
-      image: require('../../../assets/images/pp.png'),
-    },
-    {
-      id: 3,
-      name: 'Rohit  Agrawal',
-      score: 2422,
-      image: require('../../../assets/images/pp.png'),
-    },
-  ];
+  // const leaderboardData = [
+  //   {
+  //     id: 1,
+  //     name: 'Rohit  Agrawal',
+  //     score: 2422,
+  //     image: require('../../../assets/images/pp.png'),
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Rohit  Agrawal',
+  //     score: 2422,
+  //     image: require('../../../assets/images/pp.png'),
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Rohit  Agrawal',
+  //     score: 2422,
+  //     image: require('../../../assets/images/pp.png'),
+  //   },
+  // ];
 
   return (
     <ScrollView style={styles.container}>
@@ -120,17 +153,17 @@ const Rewards = () => {
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>Contacts Imported</Text>
-            <Text style={styles.statValue}>86</Text>
+            <Text style={styles.statValue}>{user?.activity.addContactCount ?? 0}</Text>
           </View>
 
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>Spam Detected</Text>
-            <Text style={styles.statValue}>20</Text>
+            <Text style={styles.statValue}>{user?.activity.spamReportCount ?? 0}</Text>
           </View>
 
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>Contacts Verified</Text>
-            <Text style={styles.statValue}>14</Text>
+            <Text style={styles.statValue}>{user?.activity.verifyContactCount ?? 0}</Text>
           </View>
         </View>
       </View>
@@ -181,15 +214,20 @@ const Rewards = () => {
         <Text style={styles.sectionTitle}>Leaderboard</Text>
 
         {leaderboardData.map((user, index) => (
-          <View key={user.id} style={styles.leaderboardItem}>
-            <Image source={user.image} style={styles.leaderAvatar} />
+          <View key={user._id} style={styles.leaderboardItem}>
+            <Image
+              source={require('../../../assets/images/pp.png')}
+              style={styles.leaderAvatar}
+            />
 
             <View style={styles.leaderInfo}>
-              <Text style={styles.leaderName}>{user.name}</Text>
+              <Text style={styles.leaderName}>
+                {user.firstName} {user.lastName}
+              </Text>
             </View>
 
             <View style={styles.scoreContainer}>
-              <Text style={styles.scoreText}>{user.score}</Text>
+              <Text style={styles.scoreText}>{user.points}</Text>
             </View>
           </View>
         ))}

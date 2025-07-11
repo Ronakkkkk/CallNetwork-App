@@ -12,17 +12,22 @@ import colors from '../../../config/color';
 import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import Edit from '../../../assets/svg/Edit.svg';
+import {useUserContext} from '../../../context/UserContext';
 
 const EditProfile = () => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const [accountType, setAccountType] = useState('personal'); // 'personal' or 'professional'
+  const user = useUserContext();
+
+  const [name, setName] = useState(`${user?.firstName} ${user?.lastName}`);
+  const [phone, setPhone] = useState(user?.contactNumber);
+  const [accountType, setAccountType] = useState(
+    user?.accountType ?? 'personal',
+  ); // 'personal' or 'professional'
 
   const navigation = useNavigation();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Save profile data logic here
+
     // Then navigate back
     navigation.goBack();
   };
@@ -95,7 +100,7 @@ const EditProfile = () => {
             </View>
           </View>
 
-          <View style={styles.inputGroup}>
+          {/* <View style={styles.inputGroup}>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
@@ -113,7 +118,7 @@ const EditProfile = () => {
                 </TouchableOpacity>
               )}
             </View>
-          </View>
+          </View> */}
 
           <View style={styles.accountTypeContainer}>
             <TouchableOpacity

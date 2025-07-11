@@ -1,4 +1,3 @@
-import {getAuth} from '@react-native-firebase/auth';
 import React, {useState} from 'react';
 import {
   View,
@@ -9,29 +8,29 @@ import {
   Image,
 } from 'react-native';
 import Info from '../../../assets/svg/Info.svg';
-import Phone from '../../../assets/svg/Phone.svg';
-import Protection from '../../../assets/svg/Protection.svg';
 import {useUserContext} from '../../../context/UserContext';
 import colors from '../../../config/color';
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 export default function HomeTab() {
   const user = useUserContext();
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
-  // Dummy data
-  const [callBalance, setCallBalance] = useState(25);
-  const [totalContacts, setTotalContacts] = useState(100);
-  const [spamDetected, setSpamDetected] = useState(30);
+  const callBalance = 25;
+  const totalContacts = user?.activity?.addContactCount ?? 0;
+  const spamDetected = user?.activity.spamReportCount ?? 0;
+  const address = '6cUJv3SryD3URzXJbDn8WiRgDrdZp6GoS7Qe6RcZzXAh';
+
   const [rewardProgress, setRewardProgress] = useState(50); // 50% progress
 
   // Truncate address function
   const truncateAddress = (address: string) => {
-    if (!address) return '';
-    return `${address.substring(0, 6)}...${address.substring(
-      address.length - 4,
+    if (!address) {
+      return '';
+    }
+    return `${address.substring(0, 5)}......${address.substring(
+      address.length - 3,
     )}`;
   };
 
@@ -81,11 +80,11 @@ export default function HomeTab() {
       <View style={styles.wrapper}>
         {/* User Details Section - Centered below the background */}
         <View style={styles.userDetailsSection}>
-          <Text style={styles.welcomeText}>Welcome, John Doe</Text>
+          <Text style={styles.welcomeText}>
+            Welcome, {user?.firstName ?? 'user'}
+          </Text>
           <View style={styles.addressContainer}>
-            <Text style={styles.addressText}>
-              {truncateAddress('234567890987656789876787')}
-            </Text>
+            <Text style={styles.addressText}>{truncateAddress(address)}</Text>
             <TouchableOpacity style={styles.copyButton}>
               <Feather name="copy" size={16} color={colors.white} />
             </TouchableOpacity>
