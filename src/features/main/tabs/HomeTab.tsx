@@ -69,12 +69,6 @@ export default function HomeTab() {
             blurRadius={0} // Change from 10 to 0 to remove blur completely
           />
         </View>
-
-        <View style={styles.topBarContent}>
-          <TouchableOpacity style={styles.backButton}>
-            <Feather name="chevron-left" size={24} color={colors.black} />
-          </TouchableOpacity>
-        </View>
       </View>
 
       <View style={styles.wrapper}>

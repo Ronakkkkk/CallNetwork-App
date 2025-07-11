@@ -27,7 +27,7 @@ export interface ILeaderboardContact {
 
 const Rewards = () => {
   const user = useUserContext();
-
+  
   const navigation = useNavigation();
 
   // FAQ state for expandable sections
@@ -102,14 +102,9 @@ const Rewards = () => {
   // ];
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={{...styles.container}}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Feather name="arrow-left" size={24} color={colors.white} />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Rewards</Text>
         <Feather name="help-circle" size={24} color={colors.white} />
       </View>
